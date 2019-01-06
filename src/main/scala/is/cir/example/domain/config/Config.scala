@@ -1,7 +1,6 @@
 package is.cir.example.domain.config
 
 import java.net.InetAddress
-
 import cats.Show
 import cats.derived._
 import cats.implicits._
@@ -23,9 +22,12 @@ final case class Config(
 )
 
 object Config {
+
+  import cats.implicits._
+
   implicit val showConfig: Show[Config] = {
-    implicit val showDuration: Show[Duration] =
-      Show.fromToString
+      //implicit val showDuration: Show[Duration] =
+     // Show.fromToString
 
     implicit val showInetAddress: Show[InetAddress] =
       Show.fromToString
@@ -33,7 +35,6 @@ object Config {
     implicit def showEnumEntry[E <: EnumEntry]: Show[E] =
       Show.show(_.entryName)
 
-    import auto.show._
     semi.show
   }
 

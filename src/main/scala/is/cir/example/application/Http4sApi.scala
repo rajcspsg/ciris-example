@@ -1,18 +1,17 @@
 package is.cir.example.application
 
-import cats.effect.IO
-import cats.syntax.apply._
+import cats.effect._
+import cats.implicits._
+import org.http4s.dsl.io._
 import ciris.Secret
 import fs2.StreamApp.ExitCode
 import fs2.{Scheduler, Stream}
 import is.cir.example.domain.config.{ApiConfig, ApiKey}
 import is.cir.example.domain.{HttpApiAlg, LoggingAlg}
-import org.http4s.dsl.io._
 import org.http4s.headers.Authorization
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.server.middleware.Timeout
 import org.http4s.{AuthScheme, Credentials, HttpService, Request}
-
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
@@ -20,6 +19,10 @@ final case class Http4sApi()(
   implicit scheduler: Scheduler,
   executionContext: ExecutionContext,
 ) extends HttpApiAlg[IO] {
+
+  private implicit val cs = IO.contextShift(executionContext)
+  private implicit val timer = IO.timer(executionContext)
+
   def redact(request: Request[IO]): Request[IO] =
     request.transformHeaders(_.redactSensitive())
 
@@ -34,7 +37,7 @@ final case class Http4sApi()(
 
   def withTimeout(timeout: Duration)(service: HttpService[IO]): HttpService[IO] =
     timeout match {
-      case finite: FiniteDuration => Timeout(finite)(service)
+      case finite: FiniteDuration =>  Timeout(finite)(service)
       case _                      => service
     }
 
