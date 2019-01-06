@@ -8,7 +8,7 @@ import ciris.cats._
 import ciris.enumeratum._
 import ciris.kubernetes.SecretKey
 import ciris.refined._
-import ciris.{ConfigDecoder, ConfigEntry, Secret, withValue}
+import ciris._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.types.net.UserPortNumber
 import is.cir.example.domain.config.AppEnvironment.{Local, Production, Testing}
@@ -36,7 +36,7 @@ abstract class ConfigAlg[F[_]](implicit me: MonadError[F, Throwable]) {
       env[UserPortNumber]("PORT")
         .orElse(prop("http.port"))
 
-    val errorsOrConfig =
+    val errorsOrConfig: ConfigResult[F, Config] =
       withValue(env[Option[AppEnvironment]]("APP_ENV")) {
         case Some(Local) | None =>
           ciris.loadConfig(
@@ -69,9 +69,6 @@ abstract class ConfigAlg[F[_]](implicit me: MonadError[F, Throwable]) {
           }
       }
 
-    errorsOrConfig.flatMap {
-      case Right(config) => me.pure(config)
-      case Left(errors)  => me.raiseError(errors.toException)
-    }
+    errorsOrConfig.orRaiseThrowable
   }
 }

@@ -7,7 +7,8 @@ inThisBuild {
 
 scalacOptions ++= Seq(
   "-language:higherKinds",
-  "-Yliteral-types"
+  "-Yliteral-types",
+  "-Ypartial-unification"
 )
 
 enablePlugins(TutPlugin)
@@ -22,17 +23,17 @@ libraryDependencies ++= Seq(
   "is.cir" %% "ciris-core",
   "is.cir" %% "ciris-enumeratum",
   "is.cir" %% "ciris-refined"
-).map(_ % "0.9.2")
+).map(_ % "0.12.1")
 
 libraryDependencies ++= Seq(
   "org.http4s" %% "http4s-dsl",
   "org.http4s" %% "http4s-blaze-server"
-).map(_ % "0.18.5")
+).map(_ % "0.20.0-M5")
 
 libraryDependencies ++= Seq(
-  "com.ovoenergy" %% "ciris-kubernetes" % "0.5",
-  "org.typelevel" %% "kittens" % "1.0.0-RC3",
-  "eu.timepit" %% "refined-cats" % "0.8.7"
+  "com.ovoenergy" %% "ciris-kubernetes" % "0.5" ,
+  "org.typelevel" %% "kittens" % "1.2.0",
+  "eu.timepit" %% "refined-cats" % "0.9.3"
 )
 
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.4" % Test
