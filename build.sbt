@@ -22,7 +22,7 @@ libraryDependencies ++= Seq(
   "is.cir" %% "ciris-core",
   "is.cir" %% "ciris-enumeratum",
   "is.cir" %% "ciris-refined"
-).map(_ % "0.9.2")
+).map(_ % "0.12.1")
 
 libraryDependencies ++= Seq(
   "org.http4s" %% "http4s-dsl",
@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.ovoenergy" %% "ciris-kubernetes" % "0.5",
-  "org.typelevel" %% "kittens" % "1.0.0-RC3",
+  "org.typelevel" %% "kittens" % "1.2.0",
   "eu.timepit" %% "refined-cats" % "0.8.7"
 )
 
