@@ -1,11 +1,11 @@
 package is.cir.example.domain
 
 import cats.FlatMap
+import cats.effect.ExitCode
 import cats.syntax.flatMap._
 import cats.syntax.functor._
 import cats.syntax.show._
 import fs2.Stream
-import fs2.StreamApp.ExitCode
 
 final case class HttpServiceAlg[F[_]: FlatMap](
   config: ConfigAlg[F],
