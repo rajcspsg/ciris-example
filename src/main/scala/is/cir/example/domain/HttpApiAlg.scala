@@ -1,7 +1,7 @@
 package is.cir.example.domain
 
+import cats.effect.ExitCode
 import fs2.Stream
-import fs2.StreamApp.ExitCode
 import is.cir.example.domain.config.ApiConfig
 
 trait HttpApiAlg[F[_]] {

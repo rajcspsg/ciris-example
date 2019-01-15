@@ -4,12 +4,10 @@ import java.net.InetAddress
 
 import cats.Show
 import cats.derived._
-import cats.implicits._
 import ciris.Secret
-import ciris.cats._
-import enumeratum.EnumEntry
+import eu.timepit.refined.api.Refined
 import eu.timepit.refined.auto._
-import eu.timepit.refined.cats._
+import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.types.net.UserPortNumber
 import eu.timepit.refined.types.string.NonEmptyString
 import is.cir.example.domain.config.AppEnvironment.{Local, Production, Testing}
@@ -23,19 +21,16 @@ final case class Config(
 )
 
 object Config {
-  implicit val showConfig: Show[Config] = {
-    implicit val showDuration: Show[Duration] =
-      Show.fromToString
 
-    implicit val showInetAddress: Show[InetAddress] =
-      Show.fromToString
+  import cats.implicits.catsStdShowForDuration
+  import eu.timepit.refined.cats._
+  import ApiConfig.{showApiConfig, showEnumEntry }
 
-    implicit def showEnumEntry[E <: EnumEntry]: Show[E] =
-      Show.show(_.entryName)
+  //implicit val showNonEmptyString: Show[NonEmptyString] = implicitly[Show[NonEmptyString]]
+  implicit val showNonEmptyString: Show[NonEmptyString] = Show.fromToString
+  //implicit val showNonEmptyString: Show[NonEmptyString] = refTypeShow[String, String, Refined](catsStdShowForDuration)
 
-    import auto.show._
-    semi.show
-  }
+  implicit val showConfig: Show[Config] = semi.show[Config]
 
   def withDefaults(
     environment: AppEnvironment,
