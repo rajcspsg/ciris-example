@@ -15,10 +15,10 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import org.http4s.implicits._
 
-final case class Http4sApi()(implicit executionContext: ExecutionContext) extends HttpApiAlg[IO] {
-
-  private implicit val cs: ContextShift[IO] = IO.contextShift(executionContext)
-  private implicit val timer: Timer[IO] = IO.timer(executionContext)
+final case class Http4sApi()(
+  implicit context: ContextShift[IO],
+  timer: Timer[IO]
+) extends HttpApiAlg[IO] {
 
   def redact(request: Request[IO]): Request[IO] =
     request.transformHeaders(_.redactSensitive())
@@ -34,8 +34,8 @@ final case class Http4sApi()(implicit executionContext: ExecutionContext) extend
 
   def withTimeout(timeout: Duration)(routes: HttpRoutes[IO]): HttpApp[IO] =
     (timeout match {
-     case finite: FiniteDuration =>  (Timeout(finite)(routes))
-     case _                     => routes
+      case finite: FiniteDuration => Timeout(finite)(routes)
+      case _                      => routes
     }).orNotFound
 
   def httpService(

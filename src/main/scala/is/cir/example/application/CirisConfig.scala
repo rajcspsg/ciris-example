@@ -12,12 +12,7 @@ import eu.timepit.refined.auto._
 import io.kubernetes.client.util
 import is.cir.example.domain.ConfigAlg
 
-object CirisConfig extends ConfigAlg[IO] {
-  val secretF: SecretInNamespaceF[IO] = {
-    val client = Eval.later(util.Config.defaultClient)
-    secretInNamespaceF("secrets", IO.eval(client))
-  }
-
+sealed abstract case class CirisConfig(secretF: SecretInNamespace[IO]) extends ConfigAlg[IO] {
   override def env[Value](key: String)(
     implicit decoder: ConfigDecoder[String, Value]
   ): ConfigEntry[IO, String, String, Value] = {
@@ -35,4 +30,11 @@ object CirisConfig extends ConfigAlg[IO] {
   ): ConfigEntry[IO, SecretKey, String, Value] = {
     secretF(name)
   }
+}
+
+object CirisConfig {
+  def apply(): IO[CirisConfig] =
+    IO(util.Config.defaultClient)
+      .map(secretInNamespace[IO]("secrets", _))
+      .map(new CirisConfig(_) {})
 }

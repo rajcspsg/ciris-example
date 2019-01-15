@@ -36,7 +36,7 @@ abstract class ConfigAlg[F[_]](implicit me: MonadError[F, Throwable]) {
       env[UserPortNumber]("PORT")
         .orElse(prop("http.port"))
 
-    val errorsOrConfig: ConfigResult[F, Config] =
+    val config: ConfigResult[F, Config] =
       withValue(env[Option[AppEnvironment]]("APP_ENV")) {
         case Some(Local) | None =>
           ciris.loadConfig(
@@ -69,6 +69,6 @@ abstract class ConfigAlg[F[_]](implicit me: MonadError[F, Throwable]) {
           }
       }
 
-    errorsOrConfig.orRaiseThrowable
+    config.orRaiseThrowable
   }
 }

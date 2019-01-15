@@ -15,7 +15,6 @@ final case class ApiConfig(
 )
 
 object ApiConfig {
-
   import cats.derived.semi
   import cats.implicits.catsStdShowForDuration
   import eu.timepit.refined.cats._
@@ -29,8 +28,9 @@ object ApiConfig {
   implicit def showEnumEntry[E <: EnumEntry]: Show[E] =
     Show.show(_.entryName)
 
+  implicit val showUserPortNumber: Show[UserPortNumber] =
+    Show.fromToString
 
-  implicit val showUserPortNumber: Show[UserPortNumber] =  Show.fromToString
-
-  implicit val showApiConfig: Show[ApiConfig] = semi.show[ApiConfig]
+  implicit val showApiConfig: Show[ApiConfig] =
+    semi.show[ApiConfig]
 }

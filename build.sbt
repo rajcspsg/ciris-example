@@ -31,11 +31,11 @@ libraryDependencies ++= Seq(
 ).map(_ % "0.20.0-M5")
 
 libraryDependencies ++= Seq(
-  "com.ovoenergy" %% "ciris-kubernetes" % "0.5" ,
+  "com.ovoenergy" %% "ciris-kubernetes" % "0.10" ,
   "org.typelevel" %% "kittens" % "1.2.0",
   "eu.timepit" %% "refined-cats" % "0.9.3"
 )
 
-libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.4" % Test
+libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.6" % Test
 
 testFrameworks += new TestFramework("utest.runner.Framework")

@@ -12,11 +12,12 @@ final case class HttpServiceAlg[F[_]: FlatMap](
   logger: LoggingAlg[F],
   http: HttpApiAlg[F]
 ) {
-  def serveHttpApi: F[Stream[F, ExitCode]] =
+  def serveHttpApi: Stream[F, ExitCode] =
     for {
-      config <- config.loadConfig
-      _ <- logger.info(s"Running with configuration: ${config.show}")
-      api <- http.serveHttpApi(config.api, logger)
-      _ <- logger.info(s"Http service is running on port ${config.api.port}")
-    } yield api
+      config <- Stream.eval(config.loadConfig)
+      _ <- Stream.eval(logger.info(s"Running with configuration: ${config.show}"))
+      api <- Stream.eval(http.serveHttpApi(config.api, logger))
+      _ <- Stream.eval(logger.info(s"Http service is running on port ${config.api.port}"))
+      exitCode <- api
+    } yield exitCode
 }

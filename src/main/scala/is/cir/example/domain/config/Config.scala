@@ -21,16 +21,15 @@ final case class Config(
 )
 
 object Config {
-
   import cats.implicits.catsStdShowForDuration
   import eu.timepit.refined.cats._
   import ApiConfig.{showApiConfig, showEnumEntry }
 
-  //implicit val showNonEmptyString: Show[NonEmptyString] = implicitly[Show[NonEmptyString]]
-  implicit val showNonEmptyString: Show[NonEmptyString] = Show.fromToString
-  //implicit val showNonEmptyString: Show[NonEmptyString] = refTypeShow[String, String, Refined](catsStdShowForDuration)
+  implicit val showNonEmptyString: Show[NonEmptyString] =
+    Show.fromToString
 
-  implicit val showConfig: Show[Config] = semi.show[Config]
+  implicit val showConfig: Show[Config] =
+    semi.show[Config]
 
   def withDefaults(
     environment: AppEnvironment,
