@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= Seq(
   "org.http4s" %% "http4s-dsl",
   "org.http4s" %% "http4s-blaze-server"
-).map(_ % "0.20.0-M5")
+).map(_ % "0.20.0")
 
 libraryDependencies ++= Seq(
   "com.ovoenergy" %% "ciris-kubernetes" % "0.10" ,

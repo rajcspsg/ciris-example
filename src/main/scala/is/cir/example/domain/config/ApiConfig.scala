@@ -31,6 +31,9 @@ object ApiConfig {
   implicit val showUserPortNumber: Show[UserPortNumber] =
     Show.fromToString
 
+  implicit val showDuration: Show[Duration] =
+  catsStdShowForDuration
+
   implicit val showApiConfig: Show[ApiConfig] =
     semi.show[ApiConfig]
 }
